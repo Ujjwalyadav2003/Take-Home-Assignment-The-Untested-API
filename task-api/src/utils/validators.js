@@ -33,4 +33,21 @@ const validateUpdateTask = (body) => {
   return null;
 };
 
-module.exports = { validateCreateTask, validateUpdateTask };
+// NEW: Part C — validation for PATCH /tasks/:id/assign
+// Design decision: `assignee` is required and must be a non-empty string
+// after trimming. An empty string ("" or whitespace-only) is rejected
+// with a 400 rather than silently accepted or treated as "unassign" —
+// unassigning isn't in scope per the brief, so we keep this endpoint's
+// job narrow: assign to a named person, nothing else.
+const validateAssignTask = (body) => {
+  if (
+    body.assignee === undefined ||
+    typeof body.assignee !== 'string' ||
+    body.assignee.trim() === ''
+  ) {
+    return 'assignee is required and must be a non-empty string';
+  }
+  return null;
+};
+
+module.exports = { validateCreateTask, validateUpdateTask, validateAssignTask };
